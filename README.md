@@ -32,5 +32,5 @@ A desktop application implementing the classic Caesar Cipher encryption and decr
    ```
 3. Run the application:
    ```bash
-   python main.py
+   python draft.py
    ```
