@@ -17,13 +17,22 @@ BOX_PARAMS = {
     "border_width_unchecked": 1
 }
 
-ENTRY_PARAMS = {
+ENTRY_PARAMS_1 = {
     "width": 100,
     "height": 30,
     "border_width": 0,
     "corner_radius": 40,
     "justify": 'c',
-    "font": LIT_FONT
+    "font": BIG_FONT
+}
+
+ENTRY_PARAMS_2 = {
+    "width": 500,
+    "height": 30,
+    "border_width": 0,
+    "corner_radius": 40,
+    "justify": 'c',
+    "font": BIG_FONT
 }
 
 MSG_PARAMS = {
@@ -32,9 +41,9 @@ MSG_PARAMS = {
     "title": 'Ошибочка',
     "icon": 'info',
     "justify": 'center',
-    "button_color": BLACK_COLOR,
+    "button_color": WHITE_COLOR,
     "button_hover_color": LIME_COLOR,
-    "button_text_color": WHITE_COLOR
+    "button_text_color": BLACK_COLOR
 }
 
 BTN_PARAMS = {
@@ -91,11 +100,16 @@ ACTIVE_MESSAGES = {
 }
 
 ERROR_MESSAGES = {
-    'not_digit_count': 'В первом поле не введено число',
-    'not_digit_length': 'Во втором поле не введено число',
-    'too_low_count': 'Нужен хотя бы 1 пароль',
-    'too_high_count': 'Допускается не больше 10 паролей',
-    'too_low_length': 'Длина пароля не должна быть меньше 5 символов',
-    'too_high_length': 'Допускается длина пароля не более 20 символов',
-    'empty_boxes': 'Не выбран ни один вид символов'
+    'empty': 'В поле пусто',
+    'not_digit': 'Нужно ввести именно число',
+    'too_small': 'Шаг не может быть меньше 1',
+    'too_big': 'Шаг не может быть больше 30',
+    'too_many': 'Слишком большой текст',
+    'only_rus': 'Не допускаются английские буквы',
+    'only_eng': 'Не допускаются русские буквы'
 }
+
+low_eng_chars = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
+up_eng_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
+low_rus_chars = 'абвгдежзийклмнопрстуфхцчшщъыьэюяабвгдежзийклмнопрстуфхцчшщъыьэюя'
+up_rus_chars = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
