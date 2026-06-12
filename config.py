@@ -103,13 +103,13 @@ ERROR_MESSAGES = {
     'empty': 'В поле пусто',
     'not_digit': 'Нужно ввести именно число',
     'too_small': 'Шаг не может быть меньше 1',
-    'too_big': 'Шаг не может быть больше 26',
+    'too_big': 'Шаг не может быть больше 33',
     'too_many': 'Слишком большой текст',
     'only_rus': 'Не допускаются английские буквы',
     'only_eng': 'Не допускаются русские буквы'
 }
 
-low_eng_chars = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
-up_eng_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
-low_rus_chars = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-up_rus_chars = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+low_eng_chars = 'abcdefghijklmnopqrstuvwxyz'
+up_eng_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+low_rus_chars = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+up_rus_chars = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
