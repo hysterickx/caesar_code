@@ -7,6 +7,11 @@ BIG_FONT = ('Constantia', 30)
 MID_FONT = ('Constantia', 25)
 LIT_FONT = ('Constantia', 20)
 
+low_eng_chars = 'abcdefghijklmnopqrstuvwxyz'
+up_eng_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+low_rus_chars = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+up_rus_chars = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+
 BOX_PARAMS = {
     "font": MID_FONT,
     "text_color": WHITE_COLOR,
@@ -109,7 +114,74 @@ ERROR_MESSAGES = {
     'only_eng': 'Не допускаются русские буквы'
 }
 
-low_eng_chars = 'abcdefghijklmnopqrstuvwxyz'
-up_eng_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-low_rus_chars = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-up_rus_chars = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+STATIC_PAGES_DATA = {
+    'GreetingsPage': {
+        'message_key': 'greetings',
+        'font': BIG_FONT,
+        'rely_start': 0.15,
+        'rely_step': 0.17,
+        'btn_rely': 0.85,
+        'buttons': [
+            ('Выйти', 'exit'),
+            ('Вперёд!', 'rules')
+        ]
+    },
+    'RulesPage': {
+        'message_key': 'rules',
+        'font': MID_FONT,
+        'rely_start': 0.05,
+        'rely_step': 0.08,
+        'btn_rely': 0.9,
+        'buttons': [
+            ('Выйти', 'exit'),
+            ('Отлично', 'start')
+        ]
+    }
+}
+
+CHOICE_PAGES_DATA = {
+    'ModePage': {
+        'question': 'Нужно зашифровать\n\n или\n\n дешифровать код?',
+        'default_value': 'encrypt',
+        'box_rely': 0.65,
+        'options': [
+            ('encrypt', 'Зашифровать'),
+            ('decrypt', 'Дешифровать')
+        ],
+        'back_page': 'RulesPage',
+        'next_page': 'LanguagePage'
+    },
+    'LanguagePage': {
+        'question': 'На каком языке\n\nваш текст?',
+        'default_value': 'rus',
+        'box_rely': 0.6,
+        'options': [
+            ('rus', 'Русский'),
+            ('eng', 'Английский')
+        ],
+        'back_page': 'ModePage',
+        'next_page': 'StepPage'
+    }
+}
+
+ENTRY_PAGES_DATA = {
+    'StepPage': {
+        'labels': [
+            ('Введите шаг сдвига', LIME_COLOR, BIG_FONT, 0.3),
+            ('(от 1 до 33)', WHITE_COLOR, LIT_FONT, 0.4)
+        ],
+        'entry_params': ENTRY_PARAMS_1,
+        'back_page': 'LanguagePage',
+        'next_action': 'switch'
+    },
+    'TextPage': {
+        'labels': [
+            ('Введите ваш текст', LIME_COLOR, BIG_FONT, 0.3),
+            ('(не более 50 символов)', WHITE_COLOR, LIT_FONT, 0.4)
+        ],
+        'entry_params': ENTRY_PARAMS_2,
+        'back_page': 'StepPage',
+        'next_action': 'finalize'
+    }
+}
+
