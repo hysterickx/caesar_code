@@ -184,4 +184,3 @@ ENTRY_PAGES_DATA = {
         'next_action': 'finalize'
     }
 }
-

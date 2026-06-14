@@ -12,7 +12,9 @@ class StaticPage(ctk.CTkFrame):
 
         page_config = cfg.STATIC_PAGES_DATA[page_name]
 
-        for idx, (text, color) in enumerate(cfg.STATIC_MESSAGES[page_config['message_key']]):
+        label_data = cfg.STATIC_MESSAGES[page_config['message_key']]
+
+        for idx, (text, color) in enumerate(label_data):
             label = ctk.CTkLabel(
                 self,
                 text=text,
@@ -21,7 +23,8 @@ class StaticPage(ctk.CTkFrame):
             )
             label.place(
                 relx=0.5,
-                rely=page_config['rely_start'] + (idx * page_config['rely_step']),
+                rely=page_config['rely_start']
+                    + (idx * page_config['rely_step']),
                 anchor='c'
             )
 
@@ -31,7 +34,9 @@ class StaticPage(ctk.CTkFrame):
             'start': controller.create_app
         }
 
-        for idx, (text, cmd_key) in enumerate(page_config['buttons']):
+        for idx, (text, cmd_key) in enumerate(
+            page_config['buttons']
+        ):
             button = ctk.CTkButton(
                 self,
                 text=text,
@@ -60,9 +65,13 @@ class ChoicePage(ctk.CTkFrame):
         )
         label.place(relx=0.5, rely=0.3, anchor='c')
 
-        self.choice_var = ctk.StringVar(value=self.page_config['default_value'])
+        self.choice_var = ctk.StringVar(
+            value=self.page_config['default_value']
+        )
 
-        for idx, (value, text) in enumerate(self.page_config['options']):
+        for idx, (value, text) in enumerate(
+            self.page_config['options']
+        ):
             box = ctk.CTkRadioButton(
                 self,
                 text=text,
@@ -77,7 +86,8 @@ class ChoicePage(ctk.CTkFrame):
             )
 
         button_data = [
-            ('Назад', lambda: self.controller.switch_to(self.page_config['back_page'])),
+            ('Назад', lambda: self.controller.switch_to(
+                self.page_config['back_page'])),
             ('Далее', self.send_info)
         ]
 
@@ -88,7 +98,10 @@ class ChoicePage(ctk.CTkFrame):
                 command=command,
                 **cfg.BTN_PARAMS
             )
-            button.place(relx=0.35 + (idx * 0.3), rely=0.85, anchor='c')
+            button.place(
+                relx=0.35 + (idx * 0.3),
+                rely=0.85, anchor='c'
+            )
 
     def send_info(self):
         info = self.choice_var.get()
@@ -106,30 +119,53 @@ class InputPage(ctk.CTkFrame):
         self.page_name = page_name
         self.page_config = cfg.ENTRY_PAGES_DATA[page_name]
 
-        # 1. Цикл создания заголовков
         for text, color, font, rely in self.page_config['labels']:
-            label = ctk.CTkLabel(self, text=text, text_color=color, font=font)
-            label.place(relx=0.5, rely=rely, anchor='c')
+            label = ctk.CTkLabel(
+                self,
+                text=text,
+                text_color=color,
+                font=font
+            )
+            label.place(
+                relx=0.5,
+                rely=rely,
+                anchor='c'
+            )
 
-        # 2. Поле ввода
-        self.entry = ctk.CTkEntry(self, **self.page_config['entry_params'])
-        self.entry.place(relx=0.5, rely=0.55, anchor='c')
+        self.entry = ctk.CTkEntry(
+            self,
+            **self.page_config['entry_params']
+        )
+        self.entry.place(
+            relx=0.5,
+            rely=0.55,
+            anchor='c'
+        )
 
-        # 3. Кнопки навигации
+        back_page = self.page_config['back_page']
+
         button_data = [
-            ('Назад', lambda: self.controller.switch_to(self.page_config['back_page'])),
+            ('Назад', lambda: self.controller.switch_to(back_page)),
             ('Далее', self.send_info)
         ]
 
         for idx, (text, command) in enumerate(button_data):
-            button = ctk.CTkButton(self, text=text, command=command, **cfg.BTN_PARAMS)
-            button.place(relx=0.35 + (idx * 0.3), rely=0.75, anchor='c')
+            button = ctk.CTkButton(
+                self,
+                text=text,
+                command=command,
+                **cfg.BTN_PARAMS
+            )
+            button.place(
+                relx=0.35 + (idx * 0.3),
+                rely=0.75,
+                anchor='c'
+            )
 
     def send_info(self):
         info = self.entry.get()
         self.controller.transfer_info(self.page_name, info)
 
-    # result=None делает аргумент необязательным для StepPage
     def get_status(self, status, result=None):
         if status in cfg.ERROR_MESSAGES:
             error_message = CTkMessagebox(
@@ -142,12 +178,14 @@ class InputPage(ctk.CTkFrame):
             self.entry.focus()
             return
 
-        # Валидация успешна. Проверяем экшен из конфига
         if self.page_config['next_action'] == 'switch':
             self.controller.switch_to('TextPage')
 
         elif self.page_config['next_action'] == 'finalize':
-            self.controller.transfer_final_info(self.entry.get(), result)
+            self.controller.transfer_final_info(
+                self.entry.get(),
+                result
+            )
 
     def update_data(self):
         self.entry.delete(0, 'end')
@@ -367,26 +405,19 @@ class MainApp(ctk.CTk):
         self.pages = {}
         self.current_frame = None
 
-        for page_name in cfg.STATIC_PAGES_DATA.keys():
-            self.pages[page_name] = StaticPage(
-                master=self.main_frame,
-                controller=self,
-                page_name=page_name
-            )
+        page_types = [
+            (cfg.STATIC_PAGES_DATA, StaticPage),
+            (cfg.CHOICE_PAGES_DATA, ChoicePage),
+            (cfg.ENTRY_PAGES_DATA, InputPage)
+        ]
 
-        for page_name in cfg.CHOICE_PAGES_DATA.keys():
-            self.pages[page_name] = ChoicePage(
-                master=self.main_frame,
-                controller=self,
-                page_name=page_name
-            )
-
-        for page_name in cfg.ENTRY_PAGES_DATA.keys():
-            self.pages[page_name] = InputPage(
-                master=self.main_frame,
-                controller=self,
-                page_name=page_name
-            )
+        for config_dict, page_class in page_types:
+            for page_name in config_dict.keys():
+                self.pages[page_name] = page_class(
+                    master=self.main_frame,
+                    controller=self,
+                    page_name=page_name
+                )
 
         for page_class in (MessagePage, FinalPage):
             page_name = page_class.__name__
@@ -394,7 +425,8 @@ class MainApp(ctk.CTk):
                 master=self.main_frame,
                 controller=self
             )
-            self.switch_to("GreetingsPage")
+
+        self.switch_to("GreetingsPage")
 
     def switch_to(self, page_name):
         if self.current_frame:
