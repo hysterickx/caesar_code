@@ -80,10 +80,10 @@ class ChoicePages(ctk.CTkFrame):
             button.place(relx=relx, rely=rely, anchor='c')
 
     def send_info(self, cmd_key):
-        info = self.choice_var.get()
+        user_input = self.choice_var.get()
         page = self.page_name
         self.controller.handle_command(
-            cmd_key, page, info
+            cmd_key, page, user_input
         )
 
     def update_ui(self):
@@ -107,9 +107,10 @@ class InputPages(ctk.CTkFrame):
             )
             label.place(relx=relx, rely=rely, anchor='c')
 
+        entry_data = page_config['entry_params']
         self.entry = ctk.CTkEntry(
             self,
-            **cfg.ENTRY_PARAMS
+            **entry_data
         )
         self.entry.place(relx=0.5, rely=0.55, anchor='c')
 
@@ -126,10 +127,10 @@ class InputPages(ctk.CTkFrame):
             button.place(relx=relx, rely=rely, anchor='c')
 
     def send_info(self, cmd_key):
-        info = self.entry.get()
         page = self.page_name
+        user_input = self.entry.get()
         self.controller.handle_command(
-            cmd_key, page, info
+            cmd_key, page, user_input
         )
 
     def show_error(self, status):
@@ -142,69 +143,52 @@ class InputPages(ctk.CTkFrame):
         self.entry.delete(0, 'end')
         self.entry.focus()
 
+    def set_focus(self):
+        self.entry.focus()
+
     def update_ui(self):
         self.entry.delete(0, 'end')
-
-    def get_input(self):
-        return self.entry.get()
 
 
 class FinalPage(ctk.CTkFrame):
     def __init__(self, master, controller, page_name=None):
         super().__init__(master, fg_color=cfg.COLOR_DARK)
 
-        frames = {}
-        frame_data = cfg.FINAL_PAGE_DATA['frames']
-        for name, relx, rely, relw, relh in frame_data:
-            frame = ctk.CTkFrame(
-                self,
-                fg_color=cfg.COLOR_DARK
-            )
-            frame.place(
-                relx=relx, rely=rely ,
-                relwidth=relw, relheight=relh
-            )
-            frames[name] = frame
-
         self.labels = {}
         label_data = cfg.FINAL_PAGE_DATA['labels']
-        for frame_name, name, color, font in label_data:
-            frame = frames[frame_name]
+        for name, text, color, font, relx, rely in label_data:
             label = ctk.CTkLabel(
-                frame,
+                self,
+                text=text,
                 text_color=color,
                 font=font,
                 wraplength=550,
                 justify='center'
             )
-            label.pack(
-                pady=10, padx=10,
-                fill='both', expand=True,
-            )
+            label.place(relx=relx, rely=rely, anchor='c')
             self.labels[name] = label
 
-        text = cfg.FINAL_PAGE_DATA['static_txt']
-        label = ctk.CTkLabel(
-            self,
-            text=text,
-            text_color=cfg.COLOR_WHITE,
-            font=cfg.FONT_LARGE
-        )
-        label.place(relx=0.5, rely=0.8, anchor='c')
-
         button_data = cfg.FINAL_PAGE_DATA['buttons']
+        cmd_map = {
+            'exit': lambda: controller.handle_command(
+                'close_app'
+            ),
+            'start': lambda: controller.handle_command(
+                'start_app', restart=True
+            ),
+            'copy': lambda: copy(self.result)
+        }
         for text, cmd_key, relx, rely in button_data:
             button = ctk.CTkButton(
                 self,
                 text=text,
-                command=partial(
-                    controller.handle_command, cmd_key
-                ),
+                command=cmd_map[cmd_key],
                 **cfg.BTN_PARAMS
             )
             button.place(relx=relx,rely=rely,anchor='c')
 
-    def show_result(self, user_input, result):
+    def show_result(self, result, user_input):
+        self.result = result
         input_label = self.labels['input_label']
         result_label = self.labels['result_label']
 
@@ -286,8 +270,7 @@ class MainLogic:
                     return f'only_{language}'
 
             self.main_data['text'] = info
-            result = self.create_code()
-            return result
+            return self.create_code()
 
     def create_code(self):
         mode = self.main_data['mode']
@@ -360,29 +343,30 @@ class MainApp(ctk.CTk):
             self.current_frame.pack_forget()
         self.current_frame = self.pages[page_name]
         self.current_frame.pack(fill="both", expand=True)
+        if hasattr(self.current_frame, "set_focus"):
+            self.current_frame.set_focus()
 
-    def handle_command(self, target, *args):
+    def handle_command(self, target, *args, **kwargs):
         if hasattr(self, target):
             method = getattr(self, target)
             if callable(method):
-                method(*args)
+                method(*args, **kwargs)
                 return
         self.switch_to(target)
 
-    def transfer_info(self, page, info):
-        status = self.logic.check_input(page, info)
+    def transfer_info(self, page, user_input):
+        status = self.logic.check_input(page, user_input)
         if status in cfg.ERROR_MESSAGES:
             self.pages[page].show_error(status)
         elif status in self.pages:
             self.switch_to(status)
         else:
-            self.transfer_result(status)
+            self.transfer_result(status, user_input)
 
-    def transfer_result(self, result):
+    def transfer_result(self, result, user_input):
         self.pages['MessagePage'].change_message('waiting')
         self.switch_to('MessagePage')
-        user_input = self.pages['TextPage'].get_input()
-        self.pages['FinalPage'].show_result(user_input, result)
+        self.pages['FinalPage'].show_result(result, user_input)
         self.after(3000, lambda: self.switch_to('FinalPage'))
 
     def close_app(self):

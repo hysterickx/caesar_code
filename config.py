@@ -65,14 +65,14 @@ BTN_PARAMS = {
 STATIC_PAGES_DATA = {
     'GreetingsPage': {
         'labels': [
-            ('Приветствую!', COLOR_LIME, FONT_LARGE, 0.5, 0.15),
-            ('Эта программа поможет тебе', COLOR_WHITE, FONT_LARGE, 0.5, 0.3),
-            ('создать Шифр Цезаря', COLOR_LIME, FONT_LARGE, 0.5, 0.45),
-            ('а также дешифровать его!', COLOR_WHITE, FONT_LARGE, 0.5, 0.6)
+            ('Приветствую!', COLOR_LIME, FONT_LARGE, 0.5, 0.2),
+            ('Эта программа поможет тебе', COLOR_WHITE, FONT_LARGE, 0.5, 0.35),
+            ('создать Шифр Цезаря', COLOR_LIME, FONT_LARGE, 0.5, 0.5),
+            ('а также дешифровать его!', COLOR_WHITE, FONT_LARGE, 0.5, 0.65)
         ],
         'buttons': [
-            ('Выйти', 'close_app', 0.35, 0.9),
-            ('Далее', 'RulesPage', 0.65, 0.9)
+            ('Выйти', 'close_app', 0.35, 0.85),
+            ('Далее', 'RulesPage', 0.65, 0.85)
         ]
     },
     'RulesPage': {
@@ -83,10 +83,10 @@ STATIC_PAGES_DATA = {
             ('на фиксированное количество позиций', COLOR_WHITE, FONT_SMALL, 0.5, 0.34),
             ('правее по алфавиту', COLOR_LIME, FONT_SMALL, 0.5, 0.42),
             ('', COLOR_LIME, FONT_SMALL, 0.5, 0.5),
-            ('Например, при шифровке с шагом равным 3', COLOR_WHITE, FONT_SMALL, 0.5, 0.58),
-            ('«А» превращается в «Г»', COLOR_LIME, FONT_SMALL, 0.5, 0.66),
-            ('а при дешифровке с шагом равным 5', COLOR_WHITE, FONT_SMALL, 0.5, 0.74),
-            ('«Ж» превращается в «В»', COLOR_LIME, FONT_SMALL, 0.5, 0.82)
+            ('Например, при шифровке с шагом равным 3', COLOR_WHITE, FONT_SMALL, 0.5, 0.55),
+            ('«А» превращается в «Г»', COLOR_LIME, FONT_SMALL, 0.5, 0.63),
+            ('а при дешифровке с шагом равным 5', COLOR_WHITE, FONT_SMALL, 0.5, 0.71),
+            ('«Ж» превращается в «В»', COLOR_LIME, FONT_SMALL, 0.5, 0.79)
         ],
         'buttons': [
             ('Начнём', 'start_app', 0.5, 0.9)
@@ -111,8 +111,8 @@ CHOICE_PAGES_DATA = {
         'label_txt': 'На каком языке\n\nваш текст?',
         'default_value': 'rus',
         'boxes': [
-            ('Русский', 'rus', 0.3, 0.6),
-            ('Английский', 'eng', 0.7, 0.6)
+            ('Русский', 'rus', 0.3, 0.55),
+            ('Английский', 'eng', 0.7, 0.55)
         ],
         'buttons': [
             ('Назад', 'ModePage', 0.35, 0.8),
@@ -123,6 +123,7 @@ CHOICE_PAGES_DATA = {
 
 INPUT_PAGES_DATA = {
     'StepPage': {
+        'entry_params': MINI_ENTRY_PARAMS,
         'labels': [
             ('Введите шаг сдвига', COLOR_LIME, FONT_LARGE, 0.5, 0.3),
             ('(от 1 до 33)', COLOR_WHITE, FONT_SMALL, 0.5, 0.4)
@@ -133,6 +134,7 @@ INPUT_PAGES_DATA = {
         ]
     },
     'TextPage': {
+        'entry_params': ENTRY_PARAMS,
         'labels': [
             ('Введите ваш текст', COLOR_LIME, FONT_LARGE, 0.5, 0.3),
             ('(не более 50 символов)', COLOR_WHITE, FONT_SMALL, 0.5, 0.4)
@@ -145,18 +147,15 @@ INPUT_PAGES_DATA = {
 }
 
 FINAL_PAGE_DATA = {
-    'frames': [
-        ('input_frame', 0, 0, 1.0, 0.3),
-        ('result_frame', 0, 0.3, 1.0, 0.3)
-    ],
     'labels': [
-        ('input_frame', 'input_label', COLOR_WHITE, FONT_MEDIUM),
-        ('result_frame', 'result_label', COLOR_LIME, FONT_LARGE)
+        ('input_label', '', COLOR_WHITE, FONT_MEDIUM, 0.5, 0.15),
+        ('result_label', '', COLOR_LIME, FONT_LARGE, 0.5, 0.45),
+        ('repeat_label', 'Хотите повторить?', COLOR_WHITE, FONT_MEDIUM, 0.5, 0.8)
     ],
-    'static_txt': 'Хотите повторить?',
     'buttons': [
-        ('Не хочу', 'close_app', 0.35, 0.8),
-        ('Давай', 'start_app', 0.65, 0.8)
+        ('Не хочу', 'exit', 0.35, 0.9),
+        ('Давай', 'start', 0.65, 0.9),
+        ('copy', 'copy', 0.5, 0.7)
     ]
 }
 
